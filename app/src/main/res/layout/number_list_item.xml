@@ -13,5 +13,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/tv_item_number"/>
+    <TextView
+        android:layout_gravity="center_vertical|end"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:fontFamily="monospace"
+        android:text="View Holder Instance: 7"
+        android:textColor="#000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_holder_instance"/>
 
 </FrameLayout>

@@ -14,25 +14,34 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
     private static final String TAG = "GreenAdapter";
     //total no of items
     private int mNumberItems;
+    //view holder counts
+    private static int VIEW_HOLDER_COUNT;
 
     public GreenAdapter(int numberItems) {
         mNumberItems = numberItems;
+        VIEW_HOLDER_COUNT = 0;
     }
 
     @NonNull
     @Override
     public NumberViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-       int layoutIdForListItem = R.layout.number_list_item;
+        int layoutIdForListItem = R.layout.number_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view  = inflater.inflate(layoutIdForListItem,viewGroup,false);
+        View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
         NumberViewHolder numberViewHolder = new NumberViewHolder(view);
+        numberViewHolder.viewHolderIndex.setText("View holder Index" + VIEW_HOLDER_COUNT);
+        int backgroundColorForViewHolder =  ColorUtils.getViewHolderBackgroundColorFromInstance(context,VIEW_HOLDER_COUNT);
+        numberViewHolder.itemView.setBackgroundColor(backgroundColorForViewHolder);
+        VIEW_HOLDER_COUNT++;
+        Log.e(TAG, "onCreateViewHolder: number of view holder "+VIEW_HOLDER_COUNT );
         return numberViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull NumberViewHolder holder, int position) {
-        Log.e(TAG, "onBindViewHolder: #"+position );
+
+        Log.e(TAG, "onBindViewHolder: #" + position);
         holder.bind(position);
 
     }
@@ -43,13 +52,15 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
     }
 
     class NumberViewHolder extends RecyclerView.ViewHolder {
-        TextView listItemNumtv;
+        TextView listItemNumtv, viewHolderIndex;
 
         public NumberViewHolder(@NonNull View itemView) {
             super(itemView);
             listItemNumtv = itemView.findViewById(R.id.tv_item_number);
+            viewHolderIndex = itemView.findViewById(R.id.view_holder_instance);
         }
-        void bind(int listIndex){
+
+        void bind(int listIndex) {
             listItemNumtv.setText(String.valueOf(listIndex));
         }
     }

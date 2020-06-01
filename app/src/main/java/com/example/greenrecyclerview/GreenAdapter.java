@@ -17,9 +17,18 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
     //view holder counts
     private static int VIEW_HOLDER_COUNT;
 
-    public GreenAdapter(int numberItems) {
+    //item list
+
+    final private ListClickListner mOnclickListner;
+
+    public GreenAdapter(int numberItems, ListClickListner OnclickListner) {
         mNumberItems = numberItems;
         VIEW_HOLDER_COUNT = 0;
+        mOnclickListner = OnclickListner;
+    }
+
+    public interface ListClickListner {
+        void onListItemClick(int clickedItemIndex);
     }
 
     @NonNull
@@ -31,10 +40,10 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
         NumberViewHolder numberViewHolder = new NumberViewHolder(view);
         numberViewHolder.viewHolderIndex.setText("View holder Index" + VIEW_HOLDER_COUNT);
-        int backgroundColorForViewHolder =  ColorUtils.getViewHolderBackgroundColorFromInstance(context,VIEW_HOLDER_COUNT);
+        int backgroundColorForViewHolder = ColorUtils.getViewHolderBackgroundColorFromInstance(context, VIEW_HOLDER_COUNT);
         numberViewHolder.itemView.setBackgroundColor(backgroundColorForViewHolder);
         VIEW_HOLDER_COUNT++;
-        Log.e(TAG, "onCreateViewHolder: number of view holder "+VIEW_HOLDER_COUNT );
+        Log.e(TAG, "onCreateViewHolder: number of view holder " + VIEW_HOLDER_COUNT);
         return numberViewHolder;
     }
 
@@ -51,17 +60,29 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
         return mNumberItems;
     }
 
-    class NumberViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    class NumberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView listItemNumtv, viewHolderIndex;
 
         public NumberViewHolder(@NonNull View itemView) {
             super(itemView);
             listItemNumtv = itemView.findViewById(R.id.tv_item_number);
             viewHolderIndex = itemView.findViewById(R.id.view_holder_instance);
+            itemView.setOnClickListener(this);
         }
 
         void bind(int listIndex) {
             listItemNumtv.setText(String.valueOf(listIndex));
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickPosition =  getAdapterPosition();
+            mOnclickListner.onListItemClick(clickPosition);
         }
     }
 }
